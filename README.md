@@ -56,5 +56,10 @@ the new one of `pacman.sh deps htop` :
 
 
 
+## info
+
+show package's infomation (`apt-cache show pkgname`) :
+
+![](https://raw.github.com/hangyan/dpkg-pacman/master/images/info.png)
 
 
