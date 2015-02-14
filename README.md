@@ -36,12 +36,11 @@ and put somewhere you think appropriate and `chmod a+x pacman.sh`.
 
 ## search
 
-Search packages,You can see the effect on the previous picture.
+Search packages.
 
-TODO:
+![](https://raw.github.com/hangyan/dpkg-pacman/master/images/search.png)
 
-1. support search multi packages at one Search
-2. ...
+currently only support search one package at a time。
 
 
 ## files
