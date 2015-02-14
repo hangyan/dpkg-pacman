@@ -18,8 +18,8 @@ This script use some system tools :
 1. `grep`
 2. `awk` 
 3. `apt-cache`
-4. `dpkg`
-5. `dpkg-query`
+4. `dpkg` (from Debian)
+5. `dpkg-query` (from Debian)
 
 
 
