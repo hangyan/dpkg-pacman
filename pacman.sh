@@ -23,6 +23,31 @@ COLOR_ARR+=("$WHITE")
 COLOR_ARR+=("$ORANGE")
 
 
+info()
+{
+    local result=$(apt-cache show $1)
+    readonly alignCol=24
+    local desc=""
+    while read -r line;do
+	echo $line | awk '{print $1}' | grep ".*:" > /dev/null 2>&1
+	if [ $? -eq 1 ];then
+	    desc="$desc\n$line"
+	    continue
+	fi
+	local fieldName=$(echo $line | awk -F ":" '{print $1}')
+	local fieldNameLen=${#fieldName}
+	local padding=$((alignCol-fieldNameLen))
+	local contents=$(echo $line | awk -F ":" '{$1="";print}')
+	echo -en "${BLUE}$fieldName:"
+	for i in $(seq 1 $padding);do echo -n " ";done
+	echo -e  "${GREEN}$contents${NOCO}"
+    done <<< "$result"
+
+    for i in $(seq 1 $alignCol); do echo -ne "${BLUE}-";done
+    echo -e "${CYAN}$desc${NOCO}\n"
+}
+
+
 deps()
 {
     local result=$(apt-cache showpkg $1)
@@ -128,6 +153,9 @@ main()
 	    ;;
 	deps)
 	    deps $2
+	    ;;
+	info)
+	    info $2
 	    ;;
 	*)
     esac
