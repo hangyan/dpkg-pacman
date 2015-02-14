@@ -15,11 +15,11 @@ suggest and feedback will be welcome. Email :
 
 This script use some system tools :
 
-1. grep
-2. awk 
-3. apt-cache
-4. dpkg
-5. dpkg-query
+1. `grep`
+2. `awk` 
+3. `apt-cache`
+4. `dpkg`
+5. `dpkg-query`
 
 
 
