@@ -95,7 +95,7 @@ deps()
 
 files()
 {
-    result=$(dpkg-query -L $1 2>/dev/null)
+    local result=$(dpkg-query -L $1 2>/dev/null)
 
     if [ $? -eq 1 ];then
 	echo -e "${RED} package '$1' not installed${NOCO}"
@@ -106,9 +106,9 @@ files()
     fi
 
     while read -r line;do
-	slashs="${line//[^\/]}"
-	slashCount=${#slashs}
-	spaceCount=$((slashCount-1))
+	local slashs="${line//[^\/]}"
+	local slashCount=${#slashs}
+	local spaceCount=$((slashCount-1))
 	if [ "$spaceCount" -gt 0 ];then
 	    printf "%0.s\t" $(seq 1 $spaceCount)
 	fi
@@ -120,14 +120,14 @@ files()
 
 search()
 {
-    result=$(apt-cache search $1)
+    local result=$(apt-cache search $1)
     while IFS=' ' read -ra line; do
-	pkg_name=${line[0]}
-	pkg_info=$(apt-cache show $pkg_name)
-	pkg_section=$(echo "$pkg_info" | grep -m 1 '^Section:' | awk '{print $2}')
-	pkg_version=$(echo "$pkg_info" | grep -m 1 '^Version:' | awk '{print $2}')
-	pkg_size=$(echo "$pkg_info" | grep -m 1 '^Size:' | awk '{print $2}')
-	pkg_desc=$(echo "$pkg_info" | grep -m 1 '^Description-en:\|Description:' | awk  '{sub(/[^ ]+ /, ""); print $0}')
+	local pkg_name=${line[0]}
+	local pkg_info=$(apt-cache show $pkg_name)
+	local pkg_section=$(echo "$pkg_info" | grep -m 1 '^Section:' | awk '{print $2}')
+	local pkg_version=$(apt-cache policy $1 | grep  "\*\*\*"  | awk '{print $2}')
+	local pkg_size=$(echo "$pkg_info" | grep -m 1 '^Size:' | awk '{print $2}')
+	local pkg_desc=$(echo "$pkg_info" | grep -m 1 '^Description-en:\|Description:' | awk  '{sub(/[^ ]+ /, ""); print $0}')
 	
 	echo -en "${BLUE}[$pkg_section]${NOCO}/${GREEN}$pkg_name${NOCO} ${CYAN}$pkg_version${NOCO}"
 	dpkg -s $pkg_name 1>/dev/null 2>&1

@@ -11,6 +11,18 @@ currently, I only finished a few commands,there is still a lot work to do. Any
 suggest and feedback will be welcome. Email :
 [yanhangyhy@gmail.com](mailto:yanhangyhy@gmail.com).
 
+# tools
+
+This script use some system tools :
+
+1. grep
+2. awk 
+3. apt-cache
+4. dpkg
+5. dpkg-query
+
+
+
 # install
 
 just download the script :
@@ -29,8 +41,7 @@ Search packages,You can see the effect on the previous picture.
 TODO:
 
 1. support search multi packages at one Search
-2. package version fix
-3. ...
+2. ...
 
 
 ## files
