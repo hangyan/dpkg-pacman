@@ -8,7 +8,7 @@ output,like this:
 
 
 currently, I only finished a few commands,there is still a lot work to do. Any
-suggest and feedback will be welcome. Email :
+suggestion and feedback will be welcome. Email :
 [yanhangyhy@gmail.com](mailto:yanhangyhy@gmail.com).
 
 # tools
