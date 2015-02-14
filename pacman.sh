@@ -3,13 +3,15 @@ set -o nounset
 
 
 ## colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-CYAN='\033[0;36m'
-BLUE='\033[0;34m'
-WHITE='\033[1;37m'
-ORANGE='\033[0;33m'
-NOCO='\033[0m'
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly CYAN='\033[0;36m'
+readonly BLUE='\033[0;34m'
+readonly WHITE='\033[1;37m'
+readonly ORANGE='\033[0;33m'
+readonly YELLOW='\033[1;33m'
+readonly PURPLE='\033[0;35m'
+readonly NOCO='\033[0m'
 
 COLOR_ARR=()
 COLOR_ARR+=("$NOCO")
@@ -20,6 +22,51 @@ COLOR_ARR+=("$BLUE")
 COLOR_ARR+=("$WHITE")
 COLOR_ARR+=("$ORANGE")
 
+
+deps()
+{
+    local result=$(apt-cache showpkg $1)
+    local rdepsStartLine=$(echo "$result" | grep -n "^Reverse Depends:" | awk -F ':' '{print $1}')
+    local depsStartLine=$(echo "$result" | grep -n "^Dependencies:" | awk -F ':' '{print $1}')
+    local providesStartLine=$(echo "$result" | grep -n "^Provides:" | awk -F ':' '{print $1}') 
+    local rdepsFirstLine=$((rdepsStartLine+1))
+    local rdepsLastLine=$((depsStartLine-1))
+    local depsFirstLine=$((depsStartLine+1))
+    local depsLastLine=$((providesStartLine-1))
+
+    
+    echo -e "${YELLOW}Reverse Depends:${NOCO}"
+    if [ "$rdepsFirstLine" -le "$rdepsLastLine" ];then
+	local rdeps=$(echo "$result" | sed -n "$rdepsFirstLine,$rdepsLastLine p") 
+	while read -r line;do
+	    local packageName=$(echo $line | awk -F ',' '{print $1}')
+	    local depsVersion=$(echo $line | awk -F ',' '{print $2}')
+	    echo -e "\t${GREEN}$packageName  ${PURPLE}===>  ${CYAN}$depsVersion${NOCO}"
+	done <<< "$rdeps"
+    else 
+	echo -e "\t${RED}None${NOCO}"
+    fi
+
+    echo -e "${YELLOW}Dependencies:${NOCO}"
+    if [ "$depsFirstLine" -le "$depsLastLine" ];then
+	deps=$(echo "$result" | sed -n "$depsFirstLine,$depsLastLine p")
+	while read -r line;do
+	    local packageVersion=$(echo $line | awk  '{print $1}')
+	    echo -e "\t${BLUE}Version : $packageVersion${NOCO}"
+	    local fieldCount=$(echo $line | awk '{print NF}')
+	    for i in $(seq 3 3 $fieldCount)
+	    do
+		local packageName=$(echo $line | awk  '{print $'${i}'}')
+		local numberIndex=$((i+1))
+		local versionIndex=$((i+2))
+		local number=$(echo $line | awk '{print $'${numberIndex}'}')
+		local version=$(echo $line | awk '{print $'${versionIndex}'}')		
+		echo -e "\t\t${GREEN}$packageName ${PURPLE}$number ${CYAN}$version${NOCO}"
+	    done
+	done <<< "$deps"
+    fi
+    
+}
 
 files()
 {
@@ -78,6 +125,9 @@ main()
 	    ;;
 	files)
 	    files $2
+	    ;;
+	deps)
+	    deps $2
 	    ;;
 	*)
     esac
