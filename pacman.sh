@@ -143,10 +143,27 @@ search()
     done <<< "$result"
 }
 
+usage()
+{
+    cat <<PACMAN_USAGE
 
+Usage: $0 {search|files|info|deps} pkgname
 
+    search : search package
+    info   : show information about package
+    files  : list files of a installed'package 
+    deps   : show package's deps
+PACMAN_USAGE
+
+exit 1
+
+}
 main()
 {
+    if [ $# -ne 2 ];then
+	usage
+    fi
+
     case "$1" in 
 	search)
 	    search $2
@@ -161,6 +178,8 @@ main()
 	    info $2
 	    ;;
 	*)
+	    usage
+	    ;;
     esac
 }	
 
