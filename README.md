@@ -1,8 +1,8 @@
 # dpkg-pacman
 
-ubuntu's package management command's output is very ugly,especially compared to 
-Arch's `pacman` and Gentoo's `emerge`.So I want to write a little script to beautify its
-output,like this:
+Dpkg command used in Ubuntu for package management is having very ugly output,
+especially in comparison to Arch's `pacman` or Gentoo's `emerge`. So I want to
+write a little script to beautify its output,like this:
 
 ![](https://raw.github.com/hangyan/dpkg-pacman/master/images/compare.png)
 
