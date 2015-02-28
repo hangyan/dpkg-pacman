@@ -122,28 +122,48 @@ search()
 {
     local result=$(apt-cache search $1)
     while IFS=' ' read -ra line; do
-	local pkg_name=${line[0]}
-	local pkg_info=$(apt-cache show $pkg_name)
-	local pkg_section=$(echo "$pkg_info" | grep -m 1 '^Section:' | awk '{print $2}')
-	local pkg_version=$(apt-cache policy $1 | grep  "\*\*\*"  | awk '{print $2}')
-	local pkg_size=$(echo "$pkg_info" | grep -m 1 '^Size:' | awk '{print $2}')
-	local pkg_desc=$(echo "$pkg_info" | grep -m 1 '^Description-en:\|Description:' | awk  '{sub(/[^ ]+ /, ""); print $0}')
+	local pkgName=${line[0]}
+	local pkgInfo=$(apt-cache show $pkgName)
+	local pkgSection=$(echo "$pkgInfo" | grep -m 1 '^Section:' | awk '{print $2}')
+	local pkgVersion=$(apt-cache policy $1 | grep  "\*\*\*"  | awk '{print $2}')
+	if [ -z "$pkgVersion" ];then
+	    pkgVersion=$(echo "$pkgInfo" | grep -m 1 '^Version:' | awk '{print $2}')
+	fi
+	local pkgSize=$(echo "$pkgInfo" | grep -m 1 '^Size:' | awk '{print $2}')
+	local pkgDesc=$(echo "$pkgInfo" | grep -m 1 '^Description-en:\|Description:' | awk  '{sub(/[^ ]+ /, ""); print $0}')
 	
-	echo -en "${BLUE}[$pkg_section]${NOCO}/${GREEN}$pkg_name${NOCO} ${CYAN}$pkg_version${NOCO}"
-	dpkg -s $pkg_name 1>/dev/null 2>&1
+	echo -en "${BLUE}[$pkgSection]${NOCO}/${GREEN}$pkgName${NOCO} ${CYAN}$pkgVersion${NOCO}"
+	dpkg -s $pkgName 1>/dev/null 2>&1
 	if [ $? -eq 0 ];then
 	    echo -e " ${ORANGE}[installed]${NOCO}"
 	else
 	    echo ""
 	fi
-	echo -e "\t$pkg_desc"
+	echo -e "\t$pkgDesc"
     done <<< "$result"
 }
 
+usage()
+{
+    cat <<PACMAN_USAGE
 
+Usage: $0 {search|files|info|deps} pkgname
 
+    search : search package
+    info   : show information about package
+    files  : list files of a installed'package 
+    deps   : show package's deps
+PACMAN_USAGE
+
+exit 1
+
+}
 main()
 {
+    if [ $# -ne 2 ];then
+	usage
+    fi
+
     case "$1" in 
 	search)
 	    search $2
@@ -158,6 +178,8 @@ main()
 	    info $2
 	    ;;
 	*)
+	    usage
+	    ;;
     esac
 }	
 
