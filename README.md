@@ -1,11 +1,10 @@
 # dpkg-pacman
 
-Dpkg command used in Ubuntu for package management is having very ugly output,
+Dpkg command used in Ubuntu for package management have a very ugly output,
 especially in comparison to Arch's `pacman` or Gentoo's `emerge`. So I want to
 write a little script to beautify its output,like this:
 
 ![](https://raw.github.com/hangyan/dpkg-pacman/master/images/compare.png)
-
 
 currently, I only finished a few commands,there is still a lot work to do. Any
 suggestion and feedback will be welcome. Email :
@@ -20,7 +19,6 @@ This script use some system tools :
 3. `apt-cache`
 4. `dpkg` (from Debian)
 5. `dpkg-query` (from Debian)
-
 
 
 # install
