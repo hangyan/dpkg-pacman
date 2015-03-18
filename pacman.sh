@@ -1,4 +1,4 @@
-!#/usr/bin/env bash
+#!/usr/bin/env bash
 
 
 set -o nounset
@@ -123,6 +123,12 @@ files()
 search()
 {
     local result=$(apt-cache search $1)
+    
+    if [ "$result" == "" ];then
+	echo -e "${RED}No package found${NOCO}"
+	return
+    fi
+    
     while IFS=' ' read -ra line; do
 	local pkgName=${line[0]}
 	local pkgInfo=$(apt-cache show $pkgName)
